@@ -299,7 +299,34 @@ h1 {
     border-radius: 4px;
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
     cursor: pointer;
+    position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.history-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(20, 17, 28, 0.55);
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease, background 0.15s ease;
+    z-index: 2;
+}
+
+.history-item:hover .history-delete {
+    opacity: 1;
+}
+
+.history-delete:hover {
+    background: #B3261E;
 }
 
 .history-item:nth-child(odd) {

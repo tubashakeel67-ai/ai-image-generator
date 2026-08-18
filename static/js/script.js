@@ -118,7 +118,7 @@ function saveHistory(history) {
 
 function addToHistory(imageUrl, prompt) {
     const history = getHistory();
-    history.unshift({ image: imageUrl, prompt });
+    history.unshift({ id: Date.now(), image: imageUrl, prompt });
 
     if (history.length > HISTORY_LIMIT) {
         history.length = HISTORY_LIMIT;
@@ -126,6 +126,16 @@ function addToHistory(imageUrl, prompt) {
 
     saveHistory(history);
     renderHistory();
+}
+
+function deleteFromHistory(id) {
+    const history = getHistory().filter(item => item.id !== id);
+    saveHistory(history);
+    renderHistory();
+
+    if (!galleryModal.classList.contains('hidden')) {
+        openGallery();
+    }
 }
 
 function selectImage(item) {
@@ -141,6 +151,16 @@ function buildHistoryCard(item) {
     div.className = 'history-item';
     div.title = item.prompt;
 
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'history-delete';
+    deleteBtn.type = 'button';
+    deleteBtn.title = 'Remove this image';
+    deleteBtn.textContent = '✕';
+    deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteFromHistory(item.id);
+    });
+
     const img = document.createElement('img');
     img.src = item.image;
     img.alt = item.prompt;
@@ -149,8 +169,11 @@ function buildHistoryCard(item) {
     caption.className = 'history-caption';
     caption.textContent = item.prompt;
 
+    div.appendChild(deleteBtn);
     div.appendChild(img);
     div.appendChild(caption);
+
+    div.addEventListener('click', () => selectImage(item));
 
     return div;
 }
@@ -168,9 +191,7 @@ function renderHistory() {
     historyEmpty.classList.add('hidden');
 
     history.slice(0, HISTORY_PREVIEW_COUNT).forEach(item => {
-        const card = buildHistoryCard(item);
-        card.addEventListener('click', () => selectImage(item));
-        historyGrid.appendChild(card);
+        historyGrid.appendChild(buildHistoryCard(item));
     });
 
     if (history.length > HISTORY_PREVIEW_COUNT) {
@@ -198,10 +219,6 @@ function openGallery() {
 
     history.forEach(item => {
         const card = buildHistoryCard(item);
-        card.addEventListener('click', () => {
-            selectImage(item);
-            closeGallery();
-        });
         galleryGrid.appendChild(card);
     });
 
