@@ -5,6 +5,12 @@ app = Flask(__name__)
 
 POLLINATIONS_URL = "https://image.pollinations.ai/prompt/"
 
+RATIO_DIMENSIONS = {
+    "square": (1024, 1024),
+    "portrait": (768, 1024),
+    "landscape": (1024, 768),
+}
+
 
 @app.route('/')
 def home():
@@ -15,6 +21,7 @@ def home():
 def generate():
     prompt = request.form.get('prompt')
     style = request.form.get('style')
+    ratio = request.form.get('ratio', 'square')
 
     if not prompt:
         return jsonify({"error": "Prompt is required"}), 400
@@ -22,8 +29,10 @@ def generate():
     # append the chosen style to the prompt so it influences the output
     full_prompt = f"{prompt}, {style}" if style else prompt
 
+    width, height = RATIO_DIMENSIONS.get(ratio, RATIO_DIMENSIONS["square"])
+
     # Pollinations builds the image directly from the URL — no API key needed
-    image_url = POLLINATIONS_URL + quote(full_prompt)
+    image_url = f"{POLLINATIONS_URL}{quote(full_prompt)}?width={width}&height={height}"
 
     return jsonify({"image": image_url})
 

@@ -29,7 +29,7 @@ body.dark {
 body {
     background: var(--page-bg);
     min-height: 100vh;
-    padding: 48px 20px;
+    padding: 28px 20px;
     font-family: 'Inter', sans-serif;
     color: var(--ink);
     transition: background 0.3s ease;
@@ -50,7 +50,7 @@ body {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 40px;
+    padding: 30px 36px;
     position: relative;
     transition: background 0.3s ease, border-color 0.3s ease;
 }
@@ -75,35 +75,46 @@ body {
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 14px;
+    margin-bottom: 10px;
 }
 
 h1 {
     font-family: 'Fraunces', serif;
     font-weight: 600;
-    font-size: 32px;
+    font-size: 28px;
     line-height: 1.15;
     color: var(--ink);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .subtitle {
     color: var(--muted);
-    font-size: 14.5px;
-    margin-bottom: 28px;
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 
 /* ---------- form ---------- */
 
+.prompt-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 6px;
+}
+
 #generate-form {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 10px;
     margin-bottom: 8px;
 }
 
+.options-row {
+    display: flex;
+    gap: 10px;
+}
+
 #prompt {
-    flex: 1 1 220px;
+    width: 100%;
     padding: 13px 14px;
     border: 1.5px solid var(--line);
     border-radius: 10px;
@@ -124,7 +135,9 @@ h1 {
     box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-#style-select {
+#style-select,
+#ratio-select {
+    flex: 1;
     padding: 13px 14px;
     border: 1.5px solid var(--line);
     border-radius: 10px;
@@ -136,7 +149,8 @@ h1 {
     cursor: pointer;
 }
 
-#style-select:focus {
+#style-select:focus,
+#ratio-select:focus {
     border-color: var(--accent);
 }
 
@@ -162,6 +176,22 @@ h1 {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
+}
+
+#surprise-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+#surprise-btn:hover {
+    color: var(--accent-deep);
+    text-decoration: underline;
 }
 
 /* ---------- states ---------- */
@@ -227,9 +257,14 @@ h1 {
     border-radius: 2px;
 }
 
+.result-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
 #download-btn {
     display: inline-block;
-    margin-top: 16px;
     padding: 10px 18px;
     background: transparent;
     color: var(--accent-deep);
@@ -246,6 +281,24 @@ h1 {
     color: #201405;
 }
 
+#regenerate-btn {
+    padding: 10px 16px;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+#regenerate-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+}
+
 /* ---------- history sidebar ---------- */
 
 .panel-history {
@@ -254,9 +307,9 @@ h1 {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 24px 20px;
+    padding: 20px 18px;
     position: sticky;
-    top: 40px;
+    top: 28px;
     transition: background 0.3s ease, border-color 0.3s ease;
 }
 
@@ -393,6 +446,29 @@ h1 {
 
 /* ---------- responsive ---------- */
 
+/* custom thin scrollbar — subtler than the default browser scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+}
+
+body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+}
+
 @media (max-width: 860px) {
     .page {
         flex-direction: column;
@@ -430,11 +506,12 @@ h1 {
         font-size: 26px;
     }
 
-    #generate-form {
+    .options-row {
         flex-direction: column;
     }
 
-    #style-select {
+    #style-select,
+    #ratio-select {
         width: 100%;
     }
 }

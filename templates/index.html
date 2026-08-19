@@ -19,20 +19,32 @@
         <h1>Describe a scene.<br>Watch it develop.</h1>
         <p class="subtitle">Type a prompt, pick a style, and generate an image with AI.</p>
 
+        <div class="prompt-toolbar">
+            <button type="button" id="surprise-btn">🎲 Surprise me</button>
+        </div>
+
         <form id="generate-form">
             <input type="text" id="prompt" name="prompt" placeholder="A lighthouse on a stormy coast..." required>
 
-            <select id="style-select" name="style">
-                <option value="">No style</option>
-                <option value="realistic photo">Realistic</option>
-                <option value="anime style">Anime</option>
-                <option value="oil painting">Oil Painting</option>
-                <option value="cartoon style">Cartoon</option>
-                <option value="cyberpunk style">Cyberpunk</option>
-                <option value="watercolor painting">Watercolor</option>
-            </select>
+            <div class="options-row">
+                <select id="style-select" name="style">
+                    <option value="">No style</option>
+                    <option value="realistic photo">Realistic</option>
+                    <option value="anime style">Anime</option>
+                    <option value="oil painting">Oil Painting</option>
+                    <option value="cartoon style">Cartoon</option>
+                    <option value="cyberpunk style">Cyberpunk</option>
+                    <option value="watercolor painting">Watercolor</option>
+                </select>
 
-            <button type="submit" id="generate-btn">Generate</button>
+                <select id="ratio-select" name="ratio">
+                    <option value="square">Square</option>
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+
+                <button type="submit" id="generate-btn">Generate</button>
+            </div>
         </form>
 
         <div id="loading" class="hidden">
@@ -46,7 +58,10 @@
             <div class="print-frame">
                 <img id="generated-image" src="" alt="Generated image">
             </div>
-            <a id="download-btn" class="hidden" href="" download="generated-image.png">Download Image</a>
+            <div class="result-actions">
+                <a id="download-btn" class="hidden" href="" download="generated-image.png">Download Image</a>
+                <button type="button" id="regenerate-btn" class="hidden">🔄 Regenerate</button>
+            </div>
         </div>
     </section>
 

@@ -1,28 +1,31 @@
 const form = document.getElementById('generate-form');
 const promptInput = document.getElementById('prompt');
 const styleSelect = document.getElementById('style-select');
+const ratioSelect = document.getElementById('ratio-select');
 const generateBtn = document.getElementById('generate-btn');
 const loading = document.getElementById('loading');
 const errorMessage = document.getElementById('error-message');
 const result = document.getElementById('result');
 const generatedImage = document.getElementById('generated-image');
 const downloadBtn = document.getElementById('download-btn');
+const regenerateBtn = document.getElementById('regenerate-btn');
+const surpriseBtn = document.getElementById('surprise-btn');
 
 const HISTORY_KEY = 'imageHistory';
 const HISTORY_LIMIT = 12;
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
+async function generateImage() {
     errorMessage.classList.add('hidden');
     result.classList.add('hidden');
     downloadBtn.classList.add('hidden');
+    regenerateBtn.classList.add('hidden');
     loading.classList.remove('hidden');
     generateBtn.disabled = true;
 
     const formData = new FormData();
     formData.append('prompt', promptInput.value);
     formData.append('style', styleSelect.value);
+    formData.append('ratio', ratioSelect.value);
 
     try {
         const response = await fetch('/generate', {
@@ -42,6 +45,8 @@ form.addEventListener('submit', async (e) => {
         downloadBtn.dataset.imageUrl = data.image;
         result.classList.remove('hidden');
         downloadBtn.classList.remove('hidden');
+        regenerateBtn.classList.remove('hidden');
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         addToHistory(data.image, promptInput.value);
 
@@ -52,6 +57,31 @@ form.addEventListener('submit', async (e) => {
         loading.classList.add('hidden');
         generateBtn.disabled = false;
     }
+}
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    generateImage();
+});
+
+regenerateBtn.addEventListener('click', generateImage);
+
+const SURPRISE_PROMPTS = [
+    'A floating island with waterfalls pouring into the clouds',
+    'A cat astronaut exploring a candy-colored planet',
+    'An ancient library hidden inside a giant tree',
+    'A neon-lit ramen shop in a rainy cyberpunk alley',
+    'A dragon curled asleep on a mountain of gold coins',
+    'A cozy cabin glowing warmly in a snowy forest at night',
+    'A steampunk airship sailing above a Victorian city',
+    'A underwater city with glass domes and glowing coral',
+    'A fox spirit dancing among falling cherry blossoms',
+    'A lighthouse keeper watching a storm roll in at dusk'
+];
+
+surpriseBtn.addEventListener('click', () => {
+    const random = SURPRISE_PROMPTS[Math.floor(Math.random() * SURPRISE_PROMPTS.length)];
+    promptInput.value = random;
 });
 
 downloadBtn.addEventListener('click', async (e) => {
@@ -144,6 +174,8 @@ function selectImage(item) {
     promptInput.value = item.prompt;
     result.classList.remove('hidden');
     downloadBtn.classList.remove('hidden');
+    regenerateBtn.classList.remove('hidden');
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function buildHistoryCard(item) {
