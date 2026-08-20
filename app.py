@@ -38,4 +38,5 @@ def generate():
 
 
 if __name__ == '__main__':
+    # debug=True is for local development only — turn off before deploying
     app.run(debug=True)
