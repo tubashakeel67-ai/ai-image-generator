@@ -101,9 +101,9 @@ downloadBtn.addEventListener('click', async (e) => {
         link.click();
 
         URL.revokeObjectURL(blobUrl);
+        showToast('Image downloaded');
     } catch (err) {
-        errorMessage.textContent = 'Failed to download image';
-        errorMessage.classList.remove('hidden');
+        showToast('Failed to download image', 'error');
     }
 });
 
@@ -274,3 +274,21 @@ document.addEventListener('keydown', (e) => {
 });
 
 renderHistory();
+
+// ---------- toast notifications ----------
+
+const toastContainer = document.getElementById('toast-container');
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('toast-visible'), 10);
+
+    setTimeout(() => {
+        toast.classList.remove('toast-visible');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
